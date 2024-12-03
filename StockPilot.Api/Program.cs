@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models; // For Swagger configuration
 using StockPilot.Api.Application.Authentication.Commands;
 using StockPilot.Api.Application.Mappings;
 using StockPilot.Api.Extensions;
+using StockPilot.Domain.Entities;
 using StockPilot.Domain.IRepositories;
 using StockPilot.Infrastructure.Data;
 using StockPilot.Infrastructure.Repositories;
@@ -16,6 +17,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddIdentity<User, Role>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
 
 // Dependency Injection
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
