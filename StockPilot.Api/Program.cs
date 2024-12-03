@@ -25,6 +25,8 @@ builder.Services.AddIdentity<User, Role>()
 
 // Dependency Injection
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IClientRepository), typeof(ClientRepository));
+
 builder.Services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
 //// Add AutoMapper 
 builder.Services.AddAutoMapper(typeof(SocieteProfile));

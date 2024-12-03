@@ -751,6 +751,73 @@ namespace StockPilot.Infrastructure.Data
                     .HasConstraintName("Zone_SiteId");
             });
 
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
+            {
+                entity.HasKey(l => new { l.LoginProvider, l.ProviderKey });
+                entity.ToTable("AspNetUserLogins");
+
+            });
+
+            modelBuilder.Entity<IdentityUserRole<string>>(entity =>
+            {
+                entity.HasKey(r => new { r.UserId, r.RoleId });
+             
+            });
+            modelBuilder.Entity<IdentityUserRole<string>>().HasNoDiscriminator();
+
+            modelBuilder.Entity<IdentityUserToken<string>>(entity =>
+            {
+                entity.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+                entity.ToTable("IdentityUserTokens");
+
+
+            });
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("AspNetUsers"); // Correct table name in your schema
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("AspNetRoles"); // Correct table name in your schema
+            });
+
+            modelBuilder.Entity<UserRole>(entity =>
+            {
+
+                entity.HasOne(ur => ur.User)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.ToTable("AspNetUserRoles"); // Correct table name in your schema
+            });
+            modelBuilder.Entity<UserRole>().HasNoDiscriminator();
+
+            modelBuilder.Entity<IdentityUserClaim<string>>(entity =>
+            {
+                entity.ToTable("AspNetUserClaims");
+            });
+
+            modelBuilder.Entity<IdentityRoleClaim<string>>(entity =>
+            {
+                entity.ToTable("AspNetRoleClaims");
+            });
+
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
+            {
+                entity.ToTable("AspNetUserLogins");
+            });
+
+            modelBuilder.Entity<IdentityUserToken<string>>(entity =>
+            {
+                entity.ToTable("AspNetUserTokens");
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
